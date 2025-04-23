@@ -1,0 +1,20 @@
+{
+  "framework": "react",
+  "typescript": true,
+  "projectName": ".",
+  "mode": "file-router",
+  "tailwind": true,
+  "packageManager": "pnpm",
+  "toolchain": "eslint+prettier",
+  "variableValues": {},
+  "git": true,
+  "version": 1,
+  "existingAddOns": [
+    "form",
+    "shadcn",
+    "tanstack-query",
+    "table",
+    "store",
+    "netlify"
+  ]
+}
