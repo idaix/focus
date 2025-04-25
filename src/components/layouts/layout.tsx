@@ -4,7 +4,7 @@ import WidgetContainer from './widget-container'
 import WidgetSelector from '../widget-selector'
 import { findLastAddedWidget, updateNodeAtPath } from '@/lib/utils.widgets'
 
-const DEFAULT_DIRECTION = 'horizontal'
+export const DEFAULT_DIRECTION = 'horizontal'
 
 const TilingLayout = () => {
   const [widgetTree, setWidgetTree] = useState<WidgetNode | null>(null)
