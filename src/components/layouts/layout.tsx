@@ -3,6 +3,7 @@ import { useState } from 'react'
 import WidgetContainer from './widget-container'
 import WidgetSelector from '../widget-selector'
 import { findLastAddedWidget, updateNodeAtPath } from '@/lib/utils.widgets'
+import { ClockWidget, TodoWidget } from '../widgets'
 
 export const DEFAULT_DIRECTION = 'horizontal'
 
@@ -89,6 +90,38 @@ const TilingLayout = () => {
     setWidgetTree(updatedTree)
   }
 
+  const renderWidget = (widgetType: WidgetType) => {
+    switch (widgetType) {
+      case 'clock':
+        return <ClockWidget />
+      case 'todo':
+        return <TodoWidget />
+      default:
+        return <div>Unknown Widget</div>
+    }
+  }
+
+  const handleResize = (nodeId: string, newSize: number) => {
+    const updateNodeSize = (node: WidgetNode): WidgetNode => {
+      if (node.id === nodeId) {
+        return { ...node, size: newSize }
+      }
+
+      if (node.children) {
+        return {
+          ...node,
+          children: node.children.map(updateNodeSize),
+        }
+      }
+
+      return node
+    }
+
+    if (widgetTree) {
+      setWidgetTree(updateNodeSize(widgetTree))
+    }
+  }
+
   return (
     <main className="bg-zinc-100 w-full h-screen p-1.5 overflow-hidden">
       {widgetTree ? (
@@ -96,7 +129,11 @@ const TilingLayout = () => {
           <div className="absolute top-1 right-1">
             <WidgetSelector onSelect={addWidget} />
           </div>
-          <WidgetContainer node={widgetTree} />
+          <WidgetContainer
+            node={widgetTree}
+            onResize={handleResize}
+            renderWidget={renderWidget}
+          />
         </>
       ) : (
         <div className="flex items-center justify-center h-full">
