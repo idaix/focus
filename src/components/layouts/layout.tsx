@@ -52,12 +52,16 @@ const TilingLayout = () => {
 
     const parentPath = path.slice(0, -1)
 
-    console.log('PARENT-PATH:', parentPath)
-
     let parentDirection = DEFAULT_DIRECTION
 
     if (parentPath.length > 0) {
-      console.log('parent path length > 0:')
+      let parent = newTree
+
+      for (const index of parentPath) {
+        parent = parent.children![index]
+      }
+
+      parentDirection = parent.direction || 'horizontal'
     }
 
     const newDirection =
