@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Clock } from 'lucide-react'
+import WidgetLayout from '../layouts/widget-layout'
 
 export default function ClockWidget() {
   const [time, setTime] = useState(new Date())
@@ -32,13 +33,11 @@ export default function ClockWidget() {
   }
 
   return (
-    <div className="h-full flex flex-col items-center justify-center text-center">
-      <div className="flex items-center gap-2 mb-4">
-        <Clock className="h-5 w-5" />
-        <h2 className="text-lg font-medium">Clock</h2>
+    <WidgetLayout title="Clock" icon={<Clock className="w-4 h-4" />}>
+      <div className="h-full flex flex-col items-center justify-center text-center">
+        <div className="text-4xl font-bold mb-2">{formatTime(time)}</div>
+        <div className="text-muted-foreground">{formatDate(time)}</div>
       </div>
-      <div className="text-4xl font-bold mb-2">{formatTime(time)}</div>
-      <div className="text-muted-foreground">{formatDate(time)}</div>
-    </div>
+    </WidgetLayout>
   )
 }

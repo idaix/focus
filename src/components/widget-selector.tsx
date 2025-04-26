@@ -17,9 +17,10 @@ import { Button } from './ui/button'
 
 interface WidgetSelectorProps {
   onSelect: (widgetType: WidgetType) => void
+  asIcon?: boolean
 }
 
-const WidgetSelector = ({ onSelect }: WidgetSelectorProps) => {
+const WidgetSelector = ({ onSelect, asIcon = false }: WidgetSelectorProps) => {
   const widgetOptions: WidgetOption[] = [
     {
       type: 'todo',
@@ -61,7 +62,7 @@ const WidgetSelector = ({ onSelect }: WidgetSelectorProps) => {
           className="flex items-center gap-2 mx-auto cursor-crosshair"
         >
           <PlusCircle className="h-4 w-4" />
-          Add Widget
+          {!asIcon && 'Add Widget'}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent

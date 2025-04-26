@@ -90,7 +90,7 @@ const TilingLayout = () => {
     setWidgetTree(updatedTree)
   }
 
-  const renderWidget = (widgetType: WidgetType) => {
+  function renderWidget(widgetType: WidgetType) {
     switch (widgetType) {
       case 'clock':
         return <ClockWidget />
@@ -101,7 +101,7 @@ const TilingLayout = () => {
     }
   }
 
-  const handleResize = (nodeId: string, newSize: number) => {
+  function handleResize(nodeId: string, newSize: number) {
     const updateNodeSize = (node: WidgetNode): WidgetNode => {
       if (node.id === nodeId) {
         return { ...node, size: newSize }
@@ -123,11 +123,11 @@ const TilingLayout = () => {
   }
 
   return (
-    <main className="bg-zinc-100 w-full h-screen p-1.5 overflow-hidden">
+    <main className="bg-zinc-100 w-full h-screen p-2 overflow-hidden bg-image">
       {widgetTree ? (
         <>
-          <div className="absolute top-1 right-1">
-            <WidgetSelector onSelect={addWidget} />
+          <div className="absolute bottom-2 right-2 z-50">
+            <WidgetSelector onSelect={addWidget} asIcon />
           </div>
           <WidgetContainer
             node={widgetTree}
@@ -138,7 +138,9 @@ const TilingLayout = () => {
       ) : (
         <div className="flex items-center justify-center h-full">
           <div className="text-center">
-            <h2 className="text-xl font-medium mb-2">No Widgets Added</h2>
+            <h2 className="text-xl font-medium mb-2 text-muted-foreground">
+              No Widgets Added
+            </h2>
             <p className="text-muted-foreground mb-4">
               Add your first widget to get started
             </p>

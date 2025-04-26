@@ -6,7 +6,6 @@ import {
 } from '@/components/ui/resizable'
 import { DEFAULT_DIRECTION } from './layout'
 import React from 'react'
-import WidgetLayout from './widget-layout'
 
 interface WidgetContainerProps {
   node: WidgetNode
@@ -21,7 +20,7 @@ const WidgetContainer = ({
 }: WidgetContainerProps) => {
   // If this is a widget node, render the widget
   if (node.type === 'widget') {
-    return <WidgetLayout>{renderWidget(node.widgetType!)}</WidgetLayout>
+    return renderWidget(node.widgetType!)
   }
 
   // If this is a container node, render its children with resiable panel
@@ -46,7 +45,7 @@ const WidgetContainer = ({
               />
             </ResizablePanel>
             {index < node.children!.length - 1 && (
-              <ResizableHandle withHandle />
+              <ResizableHandle className="bg-transparent p-1" />
             )}
           </React.Fragment>
         ))}
