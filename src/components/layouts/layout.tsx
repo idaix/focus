@@ -2,7 +2,11 @@ import type { WidgetNode, WidgetType } from '@/types/types'
 import { useState } from 'react'
 import WidgetContainer from './widget-container'
 import WidgetSelector from '../widget-selector'
-import { findLastAddedWidget, updateNodeAtPath } from '@/lib/utils.widgets'
+import {
+  findLastAddedWidget,
+  findNodeById,
+  updateNodeAtPath,
+} from '@/lib/utils.widgets'
 import { ClockWidget, TodoWidget } from '../widgets'
 
 export const DEFAULT_DIRECTION = 'horizontal'
@@ -90,12 +94,16 @@ const TilingLayout = () => {
     setWidgetTree(updatedTree)
   }
 
-  function renderWidget(widgetType: WidgetType) {
+  function renderWidget(
+    widgetType: WidgetType,
+    widgetID: string,
+    onDragStart: (e: React.DragEvent, widgetID: string) => void,
+  ) {
     switch (widgetType) {
       case 'clock':
-        return <ClockWidget />
+        return <ClockWidget onDragStart={onDragStart} widgetID={widgetID} />
       case 'todo':
-        return <TodoWidget />
+        return <TodoWidget onDragStart={onDragStart} widgetID={widgetID} />
       default:
         return <div>Unknown Widget</div>
     }
@@ -122,6 +130,36 @@ const TilingLayout = () => {
     }
   }
 
+  function handleSwapWidgets(sourceID: string, targetID: string) {
+    if (!widgetTree) return
+
+    const newTree = JSON.parse(JSON.stringify(widgetTree)) as WidgetNode
+
+    const sourceResult = findNodeById(newTree, sourceID)
+    const targetResult = findNodeById(newTree, targetID)
+
+    if (!sourceResult || !targetResult) return
+
+    const sourceWidgetType = sourceResult.node.widgetType
+    const targetWidgetType = targetResult.node.widgetType
+
+    if (sourceWidgetType && targetWidgetType) {
+      const updatedTreeAfterSource = updateNodeAtPath(
+        newTree,
+        sourceResult.path,
+        (node) => ({ ...node, widgetType: targetWidgetType }),
+      )
+
+      const updatedTreeAfterTarget = updateNodeAtPath(
+        updatedTreeAfterSource,
+        targetResult.path,
+        (node) => ({ ...node, widgetType: sourceWidgetType }),
+      )
+
+      setWidgetTree(updatedTreeAfterTarget)
+    }
+  }
+
   return (
     <main className="bg-zinc-100 w-full h-screen p-2 overflow-hidden bg-image">
       {widgetTree ? (
@@ -133,6 +171,7 @@ const TilingLayout = () => {
             node={widgetTree}
             onResize={handleResize}
             renderWidget={renderWidget}
+            onSwapWidgets={handleSwapWidgets}
           />
         </>
       ) : (

@@ -44,3 +44,24 @@ export function updateNodeAtPath(
   )
   return { ...node, children: newChildren }
 }
+
+export function findNodeById(
+  node: WidgetNode,
+  id: string,
+): { node: WidgetNode; path: number[] } | null {
+  if (node.id === id) {
+    return { node, path: [] }
+  }
+
+  if (node.children) {
+    for (let i = 0; i < node.children.length; i++) {
+      const result = findNodeById(node.children[i], id)
+
+      if (result) {
+        return { node: result.node, path: [i, ...result.path] }
+      }
+    }
+  }
+
+  return null
+}

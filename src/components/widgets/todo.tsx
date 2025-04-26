@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import WidgetLayout from '../layouts/widget-layout'
+import type { WidgetProps } from '@/types/types'
 
 interface Todo {
   id: string
@@ -11,7 +12,7 @@ interface Todo {
   completed: boolean
 }
 
-export default function TodoWidget() {
+export default function TodoWidget({ widgetID, onDragStart }: WidgetProps) {
   const [todos, setTodos] = useState<Todo[]>([
     { id: '1', text: 'Learn about tiling window managers', completed: false },
     { id: '2', text: 'Build a custom dashboard', completed: true },
@@ -41,7 +42,12 @@ export default function TodoWidget() {
   }
 
   return (
-    <WidgetLayout title="Todo" icon={<CheckSquare className="w-4 h-4" />}>
+    <WidgetLayout
+      title="Todo"
+      icon={<CheckSquare className="w-4 h-4" />}
+      onDragStart={onDragStart}
+      widgetID={widgetID}
+    >
       <div className="h-full flex flex-col">
         <div className="flex gap-2 mb-4">
           <Input
