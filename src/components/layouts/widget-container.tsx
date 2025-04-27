@@ -1,11 +1,18 @@
-import type { WidgetNode, WidgetType } from '@/types/types'
+import type {
+  DropZone,
+  SplitDirection,
+  SplitPostion,
+  WidgetNode,
+  WidgetType,
+} from '@/types/types'
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
 } from '@/components/ui/resizable'
 import { DEFAULT_DIRECTION } from './layout'
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
+import DropZoneIndicator from '../drop-zone-indicator'
 
 interface WidgetContainerProps {
   node: WidgetNode
@@ -16,6 +23,12 @@ interface WidgetContainerProps {
   ) => React.ReactNode
   onResize: (nodeID: string, newSize: number) => void
   onSwapWidgets: (sourceID: string, targetID: string) => void
+  onSplitWidgets: (
+    sourceID: string,
+    targetID: string,
+    position: SplitPostion,
+    direction: SplitDirection,
+  ) => void
 }
 
 const WidgetContainer = ({
@@ -23,8 +36,13 @@ const WidgetContainer = ({
   onResize,
   renderWidget,
   onSwapWidgets,
+  onSplitWidgets,
 }: WidgetContainerProps) => {
   const [isDragOver, setIsDragOver] = useState(false)
+  const [activeDropZone, setActiveDropZone] = useState<DropZone | null>(
+    'center',
+  )
+  const containerRef = useRef<HTMLDivElement>(null)
 
   const handleDragStart = (e: React.DragEvent, widgetID: string) => {
     e.dataTransfer.setData('application/widget-id', widgetID)
@@ -34,21 +52,92 @@ const WidgetContainer = ({
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault() // so the widget can accept the drop.
     e.dataTransfer.dropEffect = 'move'
-    setIsDragOver(true)
+    if (!isDragOver) {
+      setIsDragOver(true)
+    }
+    // Determine which drop zone is active based on cursor position
+    if (containerRef.current) {
+      const rect = containerRef.current.getBoundingClientRect()
+      const x = e.clientX - rect.left
+      const y = e.clientY - rect.top
+      const width = rect.width
+      const height = rect.height
+
+      // Calculate distances from each edge as percentages
+      const fromTop = y / height
+      const fromLeft = x / width
+      const fromRight = 1 - fromLeft
+      const fromBottom = 1 - fromTop
+
+      // Center zone is 30% from each edge (the middle 40%)
+      const inCenterX = fromLeft > 0.3 && fromRight > 0.3
+      const inCenterY = fromTop > 0.3 && fromBottom > 0.3
+
+      if (inCenterX && inCenterY) {
+        setActiveDropZone('center')
+      } else {
+        // Find the closest edge
+        const distances = [
+          { zone: 'top' as DropZone, distance: fromTop },
+          { zone: 'right' as DropZone, distance: fromRight },
+          { zone: 'bottom' as DropZone, distance: fromBottom },
+          { zone: 'left' as DropZone, distance: fromLeft },
+        ]
+
+        const closest = distances.reduce((prev, curr) =>
+          curr.distance < prev.distance ? curr : prev,
+        )
+
+        setActiveDropZone(closest.zone)
+      }
+    }
   }
 
-  const handleDragLeave = () => {
-    setIsDragOver(false)
+  const handleDragLeave = (e: React.DragEvent) => {
+    // Only consider it a leave if we're actually leaving the container, not entering a child
+    if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+      setIsDragOver(false)
+      setActiveDropZone(null)
+    }
   }
 
   const handleDrop = (e: React.DragEvent, targetID: string) => {
     e.preventDefault()
     setIsDragOver(false)
+    setActiveDropZone(null)
 
     const sourceID = e.dataTransfer.getData('application/widget-id')
 
-    if (sourceID && sourceID !== targetID) {
+    if (!sourceID || sourceID === targetID) return
+
+    if (activeDropZone === 'center') {
       onSwapWidgets(sourceID, targetID)
+    } else {
+      // Split the container based on the drop zone
+      let direction: SplitDirection
+      let position: SplitPostion
+      switch (activeDropZone) {
+        case 'top':
+          direction = 'vertical'
+          position = 'before'
+          break
+        case 'bottom':
+          direction = 'vertical'
+          position = 'after'
+          break
+        case 'left':
+          direction = 'horizontal'
+          position = 'before'
+          break
+        case 'right':
+          direction = 'horizontal'
+          position = 'after'
+          break
+        default:
+          return // should never happend
+      }
+
+      onSplitWidgets(sourceID, targetID, position, direction)
     }
   }
 
@@ -56,11 +145,13 @@ const WidgetContainer = ({
   if (node.type === 'widget') {
     return (
       <div
-        className={`h-full w-full  ${isDragOver ? 'bg-primary/10 border-2 border-dashed border-primary' : ''}`}
+        ref={containerRef}
+        className={`h-full w-full relative`}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={(e) => handleDrop(e, node.id)}
       >
+        <DropZoneIndicator activeZone={activeDropZone} isVisibal={isDragOver} />
         {renderWidget(node.widgetType!, node.id, handleDragStart)}
       </div>
     )
@@ -86,6 +177,7 @@ const WidgetContainer = ({
                 onResize={onResize}
                 renderWidget={renderWidget}
                 onSwapWidgets={onSwapWidgets}
+                onSplitWidgets={onSplitWidgets}
               />
             </ResizablePanel>
             {index < node.children!.length - 1 && (

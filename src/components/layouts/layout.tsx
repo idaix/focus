@@ -1,4 +1,9 @@
-import type { WidgetNode, WidgetType } from '@/types/types'
+import type {
+  SplitPostion,
+  SplitDirection,
+  WidgetNode,
+  WidgetType,
+} from '@/types/types'
 import { useState } from 'react'
 import WidgetContainer from './widget-container'
 import WidgetSelector from '../widget-selector'
@@ -160,6 +165,92 @@ const TilingLayout = () => {
     }
   }
 
+  function handleSplitWidgets(
+    sourceID: string,
+    targetID: string,
+    position: SplitPostion,
+    direction: SplitDirection,
+  ) {
+    if (!widgetTree) return
+
+    const newTree = JSON.parse(JSON.stringify(widgetTree)) as WidgetNode
+
+    const sourceResult = findNodeById(newTree, sourceID)
+    const targetResult = findNodeById(newTree, targetID)
+
+    if (!sourceResult || !targetResult) return
+
+    const sourceWidgetType = sourceResult.node.widgetType
+
+    if (!sourceWidgetType) return
+
+    // create a new widget with the source widget type
+    const newWidget: WidgetNode = {
+      id: `widget-${Date.now()}`,
+      type: 'widget',
+      widgetType: sourceWidgetType,
+      size: 50,
+    }
+
+    // update the target node to be a container
+    const updatedTree = updateNodeAtPath(
+      newTree,
+      targetResult?.path,
+      (node) => ({
+        id: `container-${Date.now()}`,
+        type: 'container',
+        direction,
+        children:
+          position === 'before'
+            ? [newWidget, { ...node, size: 50 }]
+            : [{ ...node, size: 50 }, newWidget],
+      }),
+    )
+    // Remove the source widget (replace it with a placeholder if it's the only widget)
+    const removeSourceWidget = (node: WidgetNode): WidgetNode => {
+      if (node.id === sourceID) {
+        // If this is the root node, we can't remove it
+        if (node.id === newTree.id) {
+          console.log('Root node')
+          return {
+            id: `widget-${Date.now()}`,
+            type: 'widget',
+            widgetType: 'notes', // Default widget type
+          }
+        }
+
+        //otherwise mark it for removal
+        return { ...node, _remove: true }
+      }
+
+      if (node.children) {
+        const newChildren = node.children
+          .map(removeSourceWidget)
+          .filter((child) => !child._remove)
+        // If this container now has only one child, replace it with that child
+        if (node.type === 'container' && newChildren.length === 1) {
+          return newChildren[0]
+        }
+
+        // If this container now has no children, mark it for removal
+        if (node.type === 'container' && newChildren.length === 0) {
+          return { ...node, _remove: true }
+        }
+
+        return {
+          ...node,
+          children: newChildren,
+        }
+      }
+      return node
+    }
+
+    // Apply the removal logic to the updated tree
+    let finalTree = removeSourceWidget(updatedTree)
+
+    setWidgetTree(finalTree)
+  }
+
   return (
     <main className="bg-zinc-100 w-full h-screen p-2 overflow-hidden bg-image">
       {widgetTree ? (
@@ -172,6 +263,7 @@ const TilingLayout = () => {
             onResize={handleResize}
             renderWidget={renderWidget}
             onSwapWidgets={handleSwapWidgets}
+            onSplitWidgets={handleSplitWidgets}
           />
         </>
       ) : (

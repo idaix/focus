@@ -1,5 +1,10 @@
 export type WidgetType = 'todo' | 'clock' | 'weather' | 'music' | 'notes'
 
+export type DropZone = 'top' | 'right' | 'bottom' | 'left' | 'center'
+
+export type SplitPostion = 'after' | 'before'
+export type SplitDirection = 'horizontal' | 'vertical'
+
 export type WidgetNode = {
   id: string
   type: 'widget' | 'container'
@@ -7,6 +12,7 @@ export type WidgetNode = {
   widgetType?: WidgetType
   children?: WidgetNode[] // self reference
   size?: number
+  _remove?: boolean
 }
 
 export type WidgetOption = {
