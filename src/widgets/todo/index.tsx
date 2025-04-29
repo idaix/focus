@@ -3,7 +3,7 @@ import { CheckSquare, Plus, Trash } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
-import WidgetLayout from '../layouts/widget-layout'
+import WidgetLayout from '@/components/layouts/widget-layout'
 import type { WidgetProps } from '@/types/types'
 
 interface Todo {

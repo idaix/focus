@@ -12,7 +12,7 @@ import {
   findNodeById,
   updateNodeAtPath,
 } from '@/lib/utils.widgets'
-import { ClockWidget, TodoWidget } from '../widgets'
+import { ClockWidget, TodoWidget } from '@/widgets'
 
 export const DEFAULT_DIRECTION = 'horizontal'
 

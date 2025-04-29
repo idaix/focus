@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Clock } from 'lucide-react'
-import WidgetLayout from '../layouts/widget-layout'
+import WidgetLayout from '@/components/layouts/widget-layout'
 import type { WidgetProps } from '@/types/types'
 
 export default function ClockWidget({ widgetID, onDragStart }: WidgetProps) {
