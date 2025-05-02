@@ -1,3 +1,4 @@
+import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,7 +14,6 @@ import {
   PlusCircle,
   StickyNote,
 } from 'lucide-react'
-import { Button } from './ui/button'
 
 interface WidgetSelectorProps {
   onSelect: (widgetType: WidgetType) => void

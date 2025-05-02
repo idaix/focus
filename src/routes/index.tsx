@@ -1,4 +1,4 @@
-import TilingLayout from '@/components/layouts/layout'
+import { TilingLAyout } from '@/features/layout'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/')({
@@ -6,5 +6,5 @@ export const Route = createFileRoute('/')({
 })
 
 function App() {
-  return <TilingLayout />
+  return <TilingLAyout />
 }

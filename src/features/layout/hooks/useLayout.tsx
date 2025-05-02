@@ -1,30 +1,27 @@
 import type {
-  SplitPostion,
   SplitDirection,
+  SplitPostion,
   WidgetNode,
   WidgetType,
 } from '@/types/types'
 import { useState } from 'react'
-import WidgetContainer from './widget-container'
-import WidgetSelector from '../widget-selector'
 import {
   findLastAddedWidget,
   findNodeById,
   updateNodeAtPath,
-} from '@/lib/utils.widgets'
-import { ClockWidget, TodoWidget } from '@/widgets'
+} from '../lib/utils'
 
 export const DEFAULT_DIRECTION = 'horizontal'
 
-const TilingLayout = () => {
-  const [widgetTree, setWidgetTree] = useState<WidgetNode | null>(null)
+export function useLayout() {
+  const [tree, setTree] = useState<WidgetNode | null>(null)
 
-  function addWidget(widgetType: WidgetType) {
+  function add(widgetType: WidgetType) {
     // generate widget id
     const newWidgetID = `widget-${Date.now()}`
 
-    if (!widgetTree) {
-      setWidgetTree({
+    if (!tree) {
+      setTree({
         id: newWidgetID,
         type: 'widget',
         widgetType,
@@ -34,13 +31,13 @@ const TilingLayout = () => {
     }
 
     // If there's one widget, Create Container to hold the two widgets
-    if (widgetTree.type === 'widget') {
-      setWidgetTree({
+    if (tree.type === 'widget') {
+      setTree({
         id: `container-${Date.now()}`,
         type: 'container',
         children: [
           {
-            ...widgetTree,
+            ...tree,
             size: 50,
           },
           {
@@ -55,7 +52,7 @@ const TilingLayout = () => {
       return
     }
 
-    const newTree = JSON.parse(JSON.stringify(widgetTree)) as WidgetNode
+    const newTree = JSON.parse(JSON.stringify(tree)) as WidgetNode
 
     const { node, path } = findLastAddedWidget(newTree)
     console.log('NODE:', node, path)
@@ -96,25 +93,10 @@ const TilingLayout = () => {
       }
     })
 
-    setWidgetTree(updatedTree)
+    setTree(updatedTree)
   }
 
-  function renderWidget(
-    widgetType: WidgetType,
-    widgetID: string,
-    onDragStart: (e: React.DragEvent, widgetID: string) => void,
-  ) {
-    switch (widgetType) {
-      case 'clock':
-        return <ClockWidget onDragStart={onDragStart} widgetID={widgetID} />
-      case 'todo':
-        return <TodoWidget onDragStart={onDragStart} widgetID={widgetID} />
-      default:
-        return <div>Unknown Widget</div>
-    }
-  }
-
-  function handleResize(nodeId: string, newSize: number) {
+  function resize(nodeId: string, newSize: number) {
     const updateNodeSize = (node: WidgetNode): WidgetNode => {
       if (node.id === nodeId) {
         return { ...node, size: newSize }
@@ -130,15 +112,15 @@ const TilingLayout = () => {
       return node
     }
 
-    if (widgetTree) {
-      setWidgetTree(updateNodeSize(widgetTree))
+    if (tree) {
+      setTree(updateNodeSize(tree))
     }
   }
 
-  function handleSwapWidgets(sourceID: string, targetID: string) {
-    if (!widgetTree) return
+  function swap(sourceID: string, targetID: string) {
+    if (!tree) return
 
-    const newTree = JSON.parse(JSON.stringify(widgetTree)) as WidgetNode
+    const newTree = JSON.parse(JSON.stringify(tree)) as WidgetNode
 
     const sourceResult = findNodeById(newTree, sourceID)
     const targetResult = findNodeById(newTree, targetID)
@@ -161,19 +143,19 @@ const TilingLayout = () => {
         (node) => ({ ...node, widgetType: sourceWidgetType }),
       )
 
-      setWidgetTree(updatedTreeAfterTarget)
+      setTree(updatedTreeAfterTarget)
     }
   }
 
-  function handleSplitWidgets(
+  function split(
     sourceID: string,
     targetID: string,
     position: SplitPostion,
     direction: SplitDirection,
   ) {
-    if (!widgetTree) return
+    if (!tree) return
 
-    const newTree = JSON.parse(JSON.stringify(widgetTree)) as WidgetNode
+    const newTree = JSON.parse(JSON.stringify(tree)) as WidgetNode
 
     const sourceResult = findNodeById(newTree, sourceID)
     const targetResult = findNodeById(newTree, targetID)
@@ -248,39 +230,8 @@ const TilingLayout = () => {
     // Apply the removal logic to the updated tree
     let finalTree = removeSourceWidget(updatedTree)
 
-    setWidgetTree(finalTree)
+    setTree(finalTree)
   }
 
-  return (
-    <main className="bg-zinc-100 w-full h-screen p-2 overflow-hidden bg-image">
-      {widgetTree ? (
-        <>
-          <div className="absolute bottom-2 right-2 z-50">
-            <WidgetSelector onSelect={addWidget} asIcon />
-          </div>
-          <WidgetContainer
-            node={widgetTree}
-            onResize={handleResize}
-            renderWidget={renderWidget}
-            onSwapWidgets={handleSwapWidgets}
-            onSplitWidgets={handleSplitWidgets}
-          />
-        </>
-      ) : (
-        <div className="flex items-center justify-center h-full">
-          <div className="text-center">
-            <h2 className="text-xl font-medium mb-2 text-muted-foreground">
-              No Widgets Added
-            </h2>
-            <p className="text-muted-foreground mb-4">
-              Add your first widget to get started
-            </p>
-            <WidgetSelector onSelect={addWidget} />
-          </div>
-        </div>
-      )}
-    </main>
-  )
+  return { tree, add, resize, swap, split }
 }
-
-export default TilingLayout

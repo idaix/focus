@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/resizable'
 import { DEFAULT_DIRECTION } from './layout'
 import React, { useRef, useState } from 'react'
-import DropZoneIndicator from '../drop-zone-indicator'
+import DropZoneIndicator from './components/drop-zone-indicator'
 
 interface WidgetContainerProps {
   node: WidgetNode
