@@ -65,3 +65,26 @@ export function findNodeById(
 
   return null
 }
+
+export function removeMarkedWidget(node: WidgetNode): WidgetNode {
+  if (node.children) {
+    const newChildren = node.children
+      .map(removeMarkedWidget)
+      .filter((child) => !child._remove)
+    // If this container now has only one child, replace it with that child
+    if (node.type === 'container' && newChildren.length === 1) {
+      return newChildren[0]
+    }
+
+    // If this container now has no children, mark it for removal
+    if (node.type === 'container' && newChildren.length === 0) {
+      return { ...node, _remove: true }
+    }
+
+    return {
+      ...node,
+      children: newChildren,
+    }
+  }
+  return node
+}

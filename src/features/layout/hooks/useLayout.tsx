@@ -147,6 +147,34 @@ export function useLayout() {
     }
   }
 
+  function remove(widgetID: string) {
+    if (!tree) return
+
+    // clone tree
+    const treeClone = JSON.parse(JSON.stringify(tree)) as WidgetNode
+
+    function processTree(node: WidgetNode): WidgetNode | null {
+      if (node.id === widgetID) return null
+
+      if (node.type !== 'container' || !node.children) return node
+
+      const newChildren = node.children
+        .map((child) => processTree(child))
+        .filter((child) => child != null)
+
+      if (newChildren.length === 1) return newChildren[0]
+      if (newChildren.length === 0) return null
+
+      return { ...node, children: newChildren }
+    }
+
+    const newTree = processTree(treeClone)
+
+    console.log('tree=', newTree)
+
+    setTree(newTree)
+  }
+
   function split(
     sourceID: string,
     targetID: string,
@@ -233,5 +261,5 @@ export function useLayout() {
     setTree(finalTree)
   }
 
-  return { tree, add, resize, swap, split }
+  return { tree, add, resize, swap, split, remove }
 }

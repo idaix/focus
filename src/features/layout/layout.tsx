@@ -7,7 +7,7 @@ import { useLayout } from './hooks/useLayout'
 export const DEFAULT_DIRECTION = 'horizontal'
 
 const TilingLayout = () => {
-  const { tree, add, resize, split, swap } = useLayout()
+  const { tree, add, resize, split, swap, remove } = useLayout()
 
   function renderWidget(
     widgetType: WidgetType,
@@ -16,9 +16,21 @@ const TilingLayout = () => {
   ) {
     switch (widgetType) {
       case 'clock':
-        return <ClockWidget onDragStart={onDragStart} widgetID={widgetID} />
+        return (
+          <ClockWidget
+            onRemove={remove}
+            onDragStart={onDragStart}
+            widgetID={widgetID}
+          />
+        )
       case 'todo':
-        return <TodoWidget onDragStart={onDragStart} widgetID={widgetID} />
+        return (
+          <TodoWidget
+            onRemove={remove}
+            onDragStart={onDragStart}
+            widgetID={widgetID}
+          />
+        )
       default:
         return <div>Unknown Widget</div>
     }
