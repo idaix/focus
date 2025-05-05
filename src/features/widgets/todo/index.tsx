@@ -12,7 +12,11 @@ interface Todo {
   completed: boolean
 }
 
-export default function TodoWidget({ widgetID, onDragStart }: WidgetProps) {
+export default function TodoWidget({
+  widgetID,
+  onDragStart,
+  onRemove,
+}: WidgetProps) {
   const [todos, setTodos] = useState<Todo[]>([
     { id: '1', text: 'Learn about tiling window managers', completed: false },
     { id: '2', text: 'Build a custom dashboard', completed: true },
@@ -48,6 +52,9 @@ export default function TodoWidget({ widgetID, onDragStart }: WidgetProps) {
       onDragStart={onDragStart}
       widgetID={widgetID}
     >
+      <Button onClick={() => onRemove(widgetID)} variant="destructive">
+        remove
+      </Button>
       <div className="h-full flex flex-col">
         <div className="flex gap-2 mb-4">
           <Input

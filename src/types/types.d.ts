@@ -2,7 +2,7 @@ export type WidgetType = 'todo' | 'clock' | 'weather' | 'music' | 'notes'
 
 export type DropZone = 'top' | 'right' | 'bottom' | 'left' | 'center'
 
-export type SplitPostion = 'after' | 'before'
+export type SplitPosition = 'after' | 'before'
 export type SplitDirection = 'horizontal' | 'vertical'
 
 export type WidgetNode = {

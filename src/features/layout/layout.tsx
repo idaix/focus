@@ -1,41 +1,42 @@
-import type { WidgetType } from '@/types/types'
+import type {
+  SplitDirection,
+  SplitPosition,
+  WidgetNode,
+  WidgetType,
+} from '@/types/types'
 import WidgetContainer from './widget-container'
 import WidgetSelector from './components/widget-selector'
-import { ClockWidget, TodoWidget } from '@/features/widgets'
-import { useLayout } from './hooks/useLayout'
+import type { ReactNode } from 'react'
 
 export const DEFAULT_DIRECTION = 'horizontal'
 
-const TilingLayout = () => {
-  const { tree, add, resize, split, swap, remove } = useLayout()
-
-  function renderWidget(
+interface IProps {
+  tree: WidgetNode | null
+  add: (t: WidgetType) => void
+  resize: (id: string, size: number) => void
+  swap: (src: string, dst: string) => void
+  split: (
+    src: string,
+    dst: string,
+    pos: SplitPosition,
+    dir: SplitDirection,
+  ) => void
+  remove: (id: string) => void
+  renderWidget: (
     widgetType: WidgetType,
     widgetID: string,
     onDragStart: (e: React.DragEvent, widgetID: string) => void,
-  ) {
-    switch (widgetType) {
-      case 'clock':
-        return (
-          <ClockWidget
-            onRemove={remove}
-            onDragStart={onDragStart}
-            widgetID={widgetID}
-          />
-        )
-      case 'todo':
-        return (
-          <TodoWidget
-            onRemove={remove}
-            onDragStart={onDragStart}
-            widgetID={widgetID}
-          />
-        )
-      default:
-        return <div>Unknown Widget</div>
-    }
-  }
+  ) => ReactNode
+}
 
+const TilingLayout = ({
+  tree,
+  add,
+  split,
+  swap,
+  resize,
+  renderWidget,
+}: IProps) => {
   return (
     <main className="bg-zinc-100 w-full h-screen p-2 overflow-hidden bg-image">
       {tree ? (
