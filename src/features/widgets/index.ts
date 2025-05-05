@@ -1,2 +1,1 @@
-export { default as TodoWidget } from './todo'
-export { default as ClockWidget } from './clock'
+export { default as WidgetRenderer } from './widget-rendrer'

@@ -24,6 +24,4 @@ export type WidgetOption = {
 
 export interface WidgetProps {
   widgetID: string
-  onDragStart: (e: React.DragEvent, widgetID: string) => void
-  onRemove: (widgetID: string) => void
 }
