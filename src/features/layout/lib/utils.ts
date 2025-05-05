@@ -2,7 +2,7 @@ import type { WidgetNode } from '@/types/types'
 
 export function findLastAddedWidget(node: WidgetNode): {
   node: WidgetNode
-  path: number[]
+  path: Array<number>
 } {
   if (node.type === 'widget') {
     return { node, path: [] }
@@ -23,7 +23,7 @@ export function findLastAddedWidget(node: WidgetNode): {
 
 export function updateNodeAtPath(
   node: WidgetNode,
-  path: number[],
+  path: Array<number>,
   updater: (node: WidgetNode) => WidgetNode,
 ): WidgetNode {
   // Base case: no more path left → we’re at the target node
@@ -48,7 +48,7 @@ export function updateNodeAtPath(
 export function findNodeById(
   node: WidgetNode,
   id: string,
-): { node: WidgetNode; path: number[] } | null {
+): { node: WidgetNode; path: Array<number> } | null {
   if (node.id === id) {
     return { node, path: [] }
   }

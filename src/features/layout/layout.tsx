@@ -1,11 +1,11 @@
+import WidgetContainer from './widget-container'
+import WidgetSelector from './components/widget-selector'
 import type {
   SplitDirection,
   SplitPosition,
   WidgetNode,
   WidgetType,
 } from '@/types/types'
-import WidgetContainer from './widget-container'
-import WidgetSelector from './components/widget-selector'
 import type { ReactNode } from 'react'
 
 export const DEFAULT_DIRECTION = 'horizontal'

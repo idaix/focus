@@ -1,11 +1,3 @@
-import { Button } from '@/components/ui/button'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import type { WidgetOption, WidgetType } from '@/types/types'
 import {
   CheckSquareIcon,
   Clock,
@@ -14,6 +6,14 @@ import {
   PlusCircle,
   StickyNote,
 } from 'lucide-react'
+import type { WidgetOption, WidgetType } from '@/types/types'
+import { Button } from '@/components/ui/button'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 
 interface WidgetSelectorProps {
   onSelect: (widgetType: WidgetType) => void
@@ -21,7 +21,7 @@ interface WidgetSelectorProps {
 }
 
 const WidgetSelector = ({ onSelect, asIcon = false }: WidgetSelectorProps) => {
-  const widgetOptions: WidgetOption[] = [
+  const widgetOptions: Array<WidgetOption> = [
     {
       type: 'todo',
       name: 'Todo List',

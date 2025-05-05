@@ -1,10 +1,3 @@
-import type {
-  DropZone,
-  SplitDirection,
-  SplitPostion,
-  WidgetNode,
-  WidgetType,
-} from '@/types/types'
 import {
   ResizableHandle,
   ResizablePanel,
@@ -13,7 +6,13 @@ import {
 import { DEFAULT_DIRECTION } from './layout'
 import React, { useRef, useState } from 'react'
 import DropZoneIndicator from './components/drop-zone-indicator'
-
+import type {
+  DropZone,
+  SplitDirection,
+  SplitPosition,
+  WidgetNode,
+  WidgetType,
+} from '@/types/types'
 interface WidgetContainerProps {
   node: WidgetNode
   renderWidget: (
@@ -26,7 +25,7 @@ interface WidgetContainerProps {
   onSplitWidgets: (
     sourceID: string,
     targetID: string,
-    position: SplitPostion,
+    position: SplitPosition,
     direction: SplitDirection,
   ) => void
 }
@@ -115,7 +114,7 @@ const WidgetContainer = ({
     } else {
       // Split the container based on the drop zone
       let direction: SplitDirection
-      let position: SplitPostion
+      let position: SplitPosition
       switch (activeDropZone) {
         case 'top':
           direction = 'vertical'

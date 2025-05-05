@@ -10,7 +10,7 @@ export type WidgetNode = {
   type: 'widget' | 'container'
   direction?: 'horizontal' | 'vertical'
   widgetType?: WidgetType
-  children?: WidgetNode[] // self reference
+  children?: Array<WidgetNode> // self reference
   size?: number
   _remove?: boolean
 }

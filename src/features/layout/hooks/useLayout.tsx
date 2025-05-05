@@ -1,16 +1,15 @@
-import type {
-  SplitDirection,
-  SplitPostion,
-  WidgetNode,
-  WidgetType,
-} from '@/types/types'
 import { useState } from 'react'
 import {
   findLastAddedWidget,
   findNodeById,
   updateNodeAtPath,
 } from '../lib/utils'
-
+import type {
+  SplitDirection,
+  SplitPosition,
+  WidgetNode,
+  WidgetType,
+} from '@/types/types'
 export const DEFAULT_DIRECTION = 'horizontal'
 
 export function useLayout() {
@@ -178,7 +177,7 @@ export function useLayout() {
   function split(
     sourceID: string,
     targetID: string,
-    position: SplitPostion,
+    position: SplitPosition,
     direction: SplitDirection,
   ) {
     if (!tree) return
@@ -205,7 +204,7 @@ export function useLayout() {
     // update the target node to be a container
     const updatedTree = updateNodeAtPath(
       newTree,
-      targetResult?.path,
+      targetResult.path,
       (node) => ({
         id: `container-${Date.now()}`,
         type: 'container',
@@ -229,7 +228,7 @@ export function useLayout() {
           }
         }
 
-        //otherwise mark it for removal
+        // otherwise mark it for removal
         return { ...node, _remove: true }
       }
 
@@ -256,7 +255,7 @@ export function useLayout() {
     }
 
     // Apply the removal logic to the updated tree
-    let finalTree = removeSourceWidget(updatedTree)
+    const finalTree = removeSourceWidget(updatedTree)
 
     setTree(finalTree)
   }

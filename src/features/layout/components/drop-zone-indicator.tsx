@@ -1,5 +1,5 @@
-import { cn } from '@/lib/utils'
 import type { DropZone } from '@/types/types'
+import { cn } from '@/lib/utils'
 
 interface DropZoneIndicatorProps {
   activeZone: DropZone | null

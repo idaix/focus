@@ -1,7 +1,7 @@
+import { createFileRoute } from '@tanstack/react-router'
 import { TilingLayout, useLayout } from '@/features/layout'
 import { ClockWidget, TodoWidget } from '@/features/widgets'
 import type { WidgetType } from '@/types/types'
-import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/')({
   component: App,
