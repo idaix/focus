@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   findLastAddedWidget,
   findNodeById,
@@ -11,9 +11,27 @@ import type {
   WidgetType,
 } from '@/types/types'
 export const DEFAULT_DIRECTION = 'horizontal'
+const LOCAL_STORAGE_KEY = 'widget-tree'
 
 export function useLayout() {
-  const [tree, setTree] = useState<WidgetNode | null>(null)
+  const [tree, setTree] = useState<WidgetNode | null>(() => {
+    try {
+      const data = localStorage.getItem(LOCAL_STORAGE_KEY)
+      return data ? JSON.parse(data) : null
+    } catch {
+      return null
+    }
+  })
+
+  useEffect(() => {
+    try {
+      if (tree) {
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(tree))
+      } else {
+        localStorage.removeItem(LOCAL_STORAGE_KEY)
+      }
+    } catch {}
+  }, [tree])
 
   function add(widgetType: WidgetType) {
     // generate widget id
