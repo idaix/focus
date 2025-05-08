@@ -1,12 +1,13 @@
 import { Button } from '@/components/ui/button'
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip'
-import { GripVerticalIcon, X } from 'lucide-react'
 import type { ReactNode } from 'react'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import { EllipsisVerticalIcon, X } from 'lucide-react'
 
 interface WidgetHeaderProps {
   title?: string
@@ -25,33 +26,34 @@ export function WidgetHeader({
 }: WidgetHeaderProps) {
   return (
     <div
-      className="flex items-center justify-between cursor-move group"
+      className="flex items-center cursor-move group px-3 py-1"
       draggable
       onDragStart={(e) => onDragStart(e, widgetID)}
     >
       <div className="flex-1 flex items-center gap-2">
         {icon}
-        <h2 className="text-lg font-medium">{title}</h2>
+        <h2 className="font-medium text-muted-foreground">{title}</h2>
       </div>
-      <div className="flex items-center gap-2">
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                variant="default"
-                size="sm"
-                className="opacity-0 group-hover:opacity-100 transition-opacity"
-                onClick={() => onRemove(widgetID)}
+
+      <div className="me-auto">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon">
+              <EllipsisVerticalIcon className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-40">
+            <DropdownMenuGroup>
+              <DropdownMenuItem
+                onSelect={() => onRemove(widgetID)}
+                variant="destructive"
               >
-                <X className="w-4 h-4" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p className="text-xs">Remove widget</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-        <GripVerticalIcon className="w-4 h-4 text-muted-foreground" />
+                <X className="h-4 w-4" />
+                Close widget
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </div>
   )

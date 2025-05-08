@@ -19,7 +19,7 @@ const WidgetLayout = ({
   onRemove,
 }: WidgetLayoutProps) => {
   return (
-    <div className="bg-black/20 backdrop-blur-md text-white h-full w-full overflow-auto p-4 flex flex-col rounded-md border border-accent/20 gap-3">
+    <div className="bg-black/20 backdrop-blur-md text-white h-full w-full overflow-auto  flex flex-col rounded-md border border-accent/20 hover:border-secondary duration-300">
       <WidgetHeader
         title={title}
         icon={icon}
@@ -27,7 +27,7 @@ const WidgetLayout = ({
         widgetID={widgetID}
         onRemove={onRemove}
       />
-      {children}
+      <div className="p-3 flex-1">{children}</div>
     </div>
   )
 }

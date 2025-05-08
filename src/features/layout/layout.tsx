@@ -38,7 +38,7 @@ const TilingLayout = ({
   renderWidget,
 }: IProps) => {
   return (
-    <main className="bg-zinc-100 w-full h-screen p-2 overflow-hidden bg-image">
+    <main className="w-full h-screen p-2 overflow-hidden bg-image">
       {tree ? (
         <>
           <div className="absolute bottom-2 right-2 z-50">
