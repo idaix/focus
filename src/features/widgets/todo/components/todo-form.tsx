@@ -27,6 +27,7 @@ const TodoForm = () => {
       const { error } = await add(value.text)
       if (error) setError(error)
       setIsPending(false)
+      form.reset()
     },
   })
   return (
@@ -39,13 +40,14 @@ const TodoForm = () => {
     >
       {error && <p className="text-red-500">{error}</p>}
 
-      <div className="flex items-end gap-2">
+      <div className="flex items-end bg-primary-foreground/30 rounded-md overflow-hidden border">
         <form.Field
           name="text"
           children={(field) => (
             <>
               <FormItem className="flex-1">
                 <Input
+                  className="rounded-none border-0"
                   name={field.name}
                   onBlur={field.handleBlur}
                   value={field.state.value}
@@ -61,7 +63,12 @@ const TodoForm = () => {
           )}
         />
 
-        <Button type="submit" disabled={!form.state.isValid || isPending}>
+        <Button
+          className="rounded-none border-0"
+          type="submit"
+          variant="ghost"
+          disabled={!form.state.isValid || isPending}
+        >
           {isPending ? <LoaderIcon className="animate-spin" /> : 'Add'}
         </Button>
       </div>

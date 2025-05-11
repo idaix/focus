@@ -2,7 +2,7 @@ import { Card } from '@/components/ui/card'
 import type { Todo } from '../db'
 import { cn } from '@/lib/utils'
 import { format } from 'date-fns'
-import { Clock } from 'lucide-react'
+import { CheckIcon, Clock, Edit2Icon, EditIcon, TrashIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { remove } from '../use-todo'
 interface Props {
@@ -34,14 +34,30 @@ const TodoCard = ({ todo }: Props) => {
       >
         {todo.text}
       </p>
-      <div className="absolute group-hover:right-0 -right-1/2 w-1/2 transition-all h-full bg-gradient-to-l from-primary-foreground/50 to-transparent flex items-center justify-end p-2">
+      <div className="absolute group-hover:right-0 w-0 -right-1/2 group-hover:w-1/2 opacity-0 group-hover:opacity-100 transition-all h-full bg-gradient-to-l from-primary-foreground/50 to-transparent flex items-center justify-end p-2 gap-1.5">
         <Button
-          variant="destructive"
-          size="sm"
+          variant="outline"
+          size="icon"
           onClick={() => remove(todo.id)}
-          className="ml-auto"
+          className=""
         >
-          Trash
+          <CheckIcon className="w-3 h-3" />
+        </Button>
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={() => remove(todo.id)}
+          className=""
+        >
+          <Edit2Icon className="w-3 h-3" />
+        </Button>
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={() => remove(todo.id)}
+          className=""
+        >
+          <TrashIcon className="w-3 h-3" />
         </Button>
       </div>
     </Card>
