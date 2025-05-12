@@ -2,7 +2,7 @@ import { Card } from '@/components/ui/card'
 import type { Todo } from '../db'
 import { cn } from '@/lib/utils'
 import { format } from 'date-fns'
-import { CheckIcon, Clock, Edit2Icon, EditIcon, TrashIcon } from 'lucide-react'
+import { CheckIcon, Clock, Edit2Icon, TrashIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { remove } from '../use-todo'
 interface Props {
