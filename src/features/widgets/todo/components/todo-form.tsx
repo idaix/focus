@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { LoaderIcon } from 'lucide-react'
 import { FormItem, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { add } from '../use-todo'
+import { addTodo } from '../use-todo'
 
 const TodoSchema = z.object({
   text: z.string(),
@@ -24,7 +24,7 @@ const TodoForm = () => {
     onSubmit: async ({ value }) => {
       setError(null)
       setIsPending(true)
-      const { error } = await add(value.text)
+      const { error } = await addTodo(value.text)
       if (error) setError(error)
       setIsPending(false)
       form.reset()

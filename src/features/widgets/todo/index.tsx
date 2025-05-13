@@ -1,10 +1,11 @@
-import { useLiveQuery } from 'dexie-react-hooks'
-import { db } from './db'
 import TodoForm from './components/todo-form'
 import TodoCard from './components/todo-card'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { formatDate } from 'date-fns'
+import { db } from './db'
+import { useLiveQuery } from 'dexie-react-hooks'
 export default function TodoWidget() {
-  const todos = useLiveQuery(() => db.todos.toArray())
+  const todos = useLiveQuery(() => db.todos.orderBy('createdAt').toArray(), [])
 
   return (
     <div className="flex flex-col gap-3 h-full">
@@ -17,9 +18,19 @@ export default function TodoWidget() {
         ) : (
           <ScrollArea className="h-full">
             <div className="flex flex-col-reverse gap-1 pb-2 pr-2">
-              {todos.map((todo) => (
-                <TodoCard key={todo.id} todo={todo} />
-              ))}
+              {todos.map((todo) => {
+                return (
+                  <div key={todo.id}>
+                    {true && (
+                      <div className="text-xs italic text-primary-foreground flex items-center gap-1.5 mb-2">
+                        <div className="flex-1 w-full h-[1px] border-b border-dashed border-primary-foreground"></div>
+                        {formatDate(todo.createdAt, 'MM/dd/yyyy')}
+                      </div>
+                    )}
+                    <TodoCard key={todo.id} todo={todo} />
+                  </div>
+                )
+              })}
             </div>
           </ScrollArea>
         )}

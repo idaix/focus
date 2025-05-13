@@ -1,20 +1,20 @@
 import Dexie, { type EntityTable } from 'dexie'
 
-interface Todo {
+export interface Todo {
   id: number
   text: string
   isCompleted: boolean
   createdAt: Date
   completedAt: Date | null
 }
-
-const db = new Dexie('TodosDatabase') as Dexie & {
-  todos: EntityTable<Todo, 'id'>
+class TodosDB extends Dexie {
+  todos!: EntityTable<Todo, 'id'>
+  constructor() {
+    super('TodoDB')
+    this.version(1).stores({
+      todos: '++id, text, isCompleted, createdAt, completedAt',
+    })
+  }
 }
 
-db.version(1).stores({
-  todos: '++id, text, createdAt',
-})
-
-export type { Todo }
-export { db }
+export const db = new TodosDB()

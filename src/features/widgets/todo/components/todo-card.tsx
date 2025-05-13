@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils'
 import { format } from 'date-fns'
 import { CheckIcon, Clock, Edit2Icon, TrashIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { remove } from '../use-todo'
+import { removeTodo, completeTodo } from '../use-todo'
 interface Props {
   todo: Todo
 }
@@ -34,32 +34,35 @@ const TodoCard = ({ todo }: Props) => {
       >
         {todo.text}
       </p>
-      <div className="absolute group-hover:right-0 w-0 -right-1/2 group-hover:w-1/2 opacity-0 group-hover:opacity-100 transition-all h-full bg-gradient-to-l from-primary-foreground/50 to-transparent flex items-center justify-end p-2 gap-1.5">
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={() => remove(todo.id)}
-          className=""
-        >
-          <CheckIcon className="w-3 h-3" />
-        </Button>
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={() => remove(todo.id)}
-          className=""
-        >
-          <Edit2Icon className="w-3 h-3" />
-        </Button>
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={() => remove(todo.id)}
-          className=""
-        >
-          <TrashIcon className="w-3 h-3" />
-        </Button>
-      </div>
+      {!todo.isCompleted && (
+        <div className="absolute group-hover:right-0 w-0 -right-1/2 group-hover:w-1/2 opacity-0 group-hover:opacity-100 transition-all h-full bg-gradient-to-l from-primary-foreground/50 to-transparent flex items-center justify-end p-2 gap-1.5">
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => completeTodo(todo.id)}
+            className=""
+          >
+            <CheckIcon className="w-3 h-3" />
+          </Button>
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => removeTodo(todo.id)}
+            className=""
+            disabled
+          >
+            <Edit2Icon className="w-3 h-3" />
+          </Button>
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => removeTodo(todo.id)}
+            className=""
+          >
+            <TrashIcon className="w-3 h-3" />
+          </Button>
+        </div>
+      )}
     </Card>
   )
 }
