@@ -8,8 +8,6 @@ import {
   MapPinIcon,
   SearchIcon,
   DropletsIcon,
-  SunriseIcon,
-  SunsetIcon,
   TrashIcon,
   PlusIcon,
 } from 'lucide-react'

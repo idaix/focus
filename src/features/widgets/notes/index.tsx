@@ -14,7 +14,7 @@ const COLORS = [
   { name: 'red', value: 'bg-red-500/20' },
 ]
 
-export default function NotesWidget({ widgetID }: { widgetID: string }) { // WidgetID here acts as a "Box" ID or just ignored?
+export default function NotesWidget() { // WidgetID here acts as a "Box" ID or just ignored?
   // Ideally, a widget instance should just show *one* note, or the *list* of notes?
   // "Multiple Notes" implies the widget is a "Notes App".
   // Let's make it a "Notes App" where you can switch between notes.
