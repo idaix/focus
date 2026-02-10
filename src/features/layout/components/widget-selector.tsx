@@ -1,4 +1,4 @@
-import { CheckSquareIcon, Clock, PlusCircle } from 'lucide-react'
+import { CheckSquareIcon, Clock, PlusCircle, CloudIcon, TimerIcon, StickyNoteIcon, CalculatorIcon } from 'lucide-react'
 import type { WidgetOption, WidgetType } from '@/types/types'
 import { Button } from '@/components/ui/button'
 import {
@@ -26,6 +26,30 @@ const WidgetSelector = ({ onSelect, asIcon = false }: WidgetSelectorProps) => {
       name: 'Clock',
       description: 'Display current time and date',
       icon: <Clock className="h-4 w-4" />,
+    },
+    {
+      type: 'weather',
+      name: 'Weather',
+      description: 'Current weather and forecast',
+      icon: <CloudIcon className="h-4 w-4" />,
+    },
+    {
+      type: 'pomodoro',
+      name: 'Pomodoro',
+      description: 'Focus timer',
+      icon: <TimerIcon className="h-4 w-4" />,
+    },
+    {
+      type: 'notes',
+      name: 'Notes',
+      description: 'Quick sticky notes',
+      icon: <StickyNoteIcon className="h-4 w-4" />,
+    },
+    {
+      type: 'calculator',
+      name: 'Calculator',
+      description: 'Simple calculator',
+      icon: <CalculatorIcon className="h-4 w-4" />,
     },
   ]
 

@@ -1,4 +1,4 @@
-export type WidgetType = 'todo' | 'clock' | 'weather' | 'music' | 'notes'
+export type WidgetType = 'todo' | 'clock' | 'weather' | 'music' | 'notes' | 'pomodoro' | 'calculator'
 
 export type DropZone = 'top' | 'right' | 'bottom' | 'left' | 'center'
 
