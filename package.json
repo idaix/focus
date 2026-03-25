@@ -42,6 +42,7 @@
     "date-fns": "^4.1.0",
     "dexie": "^4.0.11",
     "dexie-react-hooks": "^1.1.7",
+    "framer-motion": "^12.34.0",
     "install": "^0.13.0",
     "lucide-react": "^0.476.0",
     "react": "^19.0.0",
